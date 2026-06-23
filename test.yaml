@@ -1,0 +1,17 @@
+---
+- name: Sleep so we can inspect the job pod's /mnt
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Show hostname so we know which pod this is
+      command: hostname
+      register: host_out
+
+    - debug:
+        msg: "Job running in pod: {{ host_out.stdout }}"
+
+    - name: Sleep for 3 minutes — go inspect /mnt now
+      pause:
+        minutes: 3

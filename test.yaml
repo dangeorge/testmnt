@@ -5,7 +5,7 @@
   gather_facts: false
 
   vars:
-    target_file: "/mnt/yourfile.txt"   # change this to the actual file path
+    target_file: "/mnt/abc.txt"   # change this to the actual file path
 
   tasks:
     - name: Check if file exists

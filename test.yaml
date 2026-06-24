@@ -1,17 +1,23 @@
 ---
-- name: Sleep so we can inspect the job pod's /mnt
+- name: Check if file is present in /mnt
   hosts: localhost
   connection: local
   gather_facts: false
 
+  vars:
+    target_file: "/mnt/yourfile.txt"   # change this to the actual file path
+
   tasks:
-    - name: Show hostname so we know which pod this is
-      command: hostname
-      register: host_out
+    - name: Check if file exists
+      stat:
+        path: "{{ target_file }}"
+      register: file_check
 
-    - debug:
-        msg: "Job running in pod: {{ host_out.stdout }}"
+    - name: Report file presence
+      debug:
+        msg: "File {{ target_file }} {{ 'EXISTS' if file_check.stat.exists else 'DOES NOT EXIST' }}"
 
-    - name: Sleep for 3 minutes — go inspect /mnt now
-      pause:
-        minutes: 3
+    - name: Fail if file is missing
+      fail:
+        msg: "Required file {{ target_file }} not found!"
+      when: not file_check.stat.exists

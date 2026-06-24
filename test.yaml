@@ -17,6 +17,10 @@
       debug:
         msg: "File {{ target_file }} {{ 'EXISTS' if file_check.stat.exists else 'DOES NOT EXIST' }}"
 
+    - name: Sleep for 2 minutes
+      ansible.builtin.pause:
+        minutes: 2
+
     - name: Fail if file is missing
       fail:
         msg: "Required file {{ target_file }} not found!"
